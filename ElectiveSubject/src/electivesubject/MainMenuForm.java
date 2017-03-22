@@ -5,17 +5,28 @@
  */
 package electivesubject;
 
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
+import javax.swing.JTable;
+
 /**
  *
  * @author vinay
  */
 public class MainMenuForm extends javax.swing.JFrame {
-
+    public static LoadFileForm loadform;
+    public static FillForm form;
     /**
      * Creates new form MainMenuForm
      */
     public MainMenuForm() {
         initComponents();
+        
         allocateButton.setEnabled(false);
         listButton.setEnabled(false);
         graphButton.setEnabled(false);
@@ -150,22 +161,102 @@ public class MainMenuForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        LoadFileForm loadform = new LoadFileForm();
+        loadform = new LoadFileForm();
         //this.setVisible(false);
         loadform.setVisible(true);
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void listButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listButtonActionPerformed
-        // TODO add your handling code here:
+        JTable jt;
+        
+        String[] titles = {"MIS No", "CGPA"};
+        ArrayList<String[]> list =  new ArrayList<String[]>();
+        for(Subject s : Global.subjectArray) {
+            String[] subjTitle = new String[2];
+            subjTitle[0] = s.getName();
+            subjTitle[1] = "";
+            list.add(subjTitle);
+            for(Student stud : s.allocatedStudent) {
+                String[] studRow = new String[2];
+                studRow[0] = Integer.toString(stud.getMis());
+                studRow[1] = Float.toString(stud.getCGPA());
+                list.add(studRow);
+            }
+            subjTitle[0] = "";
+            subjTitle[1] = "";
+            list.add(subjTitle);
+        }
+        String[][] str = new String[list.size()][2];
+        int i = 0;
+        for(String[] s: list) {
+            str[i] = s;
+            i++;
+        }
+        AllocatedList listform = new AllocatedList();
+        listform.setVisible(true);
+        jt = new JTable(str, titles);
+        AllocatedList.displayPanel.setLayout(new FlowLayout());
+        AllocatedList.displayPanel.add(jt);
+        AllocatedList.displayPanel.revalidate();
+        AllocatedList.displayPanel.repaint();
+        listform.revalidate();
+        listform.repaint();
+        
     }//GEN-LAST:event_listButtonActionPerformed
 
     private void fillFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillFormButtonActionPerformed
-        FillForm form = new FillForm();
+        form = new FillForm();
         form.setVisible(true);
     }//GEN-LAST:event_fillFormButtonActionPerformed
 
     private void allocateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allocateButtonActionPerformed
+        HashMap<Float, Subject>[] subjList = new HashMap[3];
+        for(int i = 0; i <= 2; i++) {
+            Global.notFilledForm[i] = new LinkedList<Student> ();
+            subjList[i] = new HashMap<Float, Subject> ();
+            for(Student s: Global.cgpaList[i]) {
+                byte pl[] =s.getPriorityList();
+                if(pl == null) {
+                    Global.notFilledForm[i].add(s);
+                    continue;
+                }
+                int counter = 0;
+                for(byte id: pl) {
+                    Subject subj = Global.subjectArray.get(id);
+                    if(subj.getMaxCap() - subj.getCurrCap() != 0) {
+                        //add this student to subj list
+                        subj.allocatedStudent.add(s);
+                        System.out.println("Allocated "+subj.getName()+" to "+s.getMis());
+                        break;
+                    }
+                    else {
+                        Global.priority[counter] += 1;
+                    }
+                    counter++;
+                }
+            }
+        }
         
+        
+        for(Subject s: Global.subjectArray) {
+            int t = s.getMaxCap() - s.getCurrCap();
+            if(t!= 0) {
+                subjList[s.getYear()- 2].put((float)t/s.getMaxCap(), s);
+            }
+        }
+       // Arrays.sort(diff);
+       for(int i = 0; i <= 2; i++) {
+           TreeMap<Float, Subject> sorted = new TreeMap<>(subjList[i]);
+            Set<Entry<Float, Subject>> mappings = sorted.entrySet();
+            LinkedList<Student> studList = Global.notFilledForm[i];
+            for(Entry<Float, Subject> mapping : mappings){
+                while((mapping.getValue().getMaxCap() - mapping.getValue().getCurrCap()) != 0 && studList.size() != 0) {
+                    mapping.getValue().allocatedStudent.addLast(studList.poll());
+                    System.out.println("Allocated "+mapping.getValue().getName());
+                }
+            }   
+
+       }
         graphButton.setEnabled(true);
         listButton.setEnabled(true);
     }//GEN-LAST:event_allocateButtonActionPerformed

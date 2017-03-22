@@ -5,10 +5,31 @@
  */
 package electivesubject;
 
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.EventObject;
+import java.util.LinkedList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.event.CellEditorListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+
 /**
  *
  * @author vinay
  */
+
 public class FillForm extends javax.swing.JFrame {
 
     /**
@@ -28,42 +49,15 @@ public class FillForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        SubjectList = new javax.swing.JPanel();
         misTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         submitButton = new javax.swing.JButton();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        subjectListPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Student Form");
-
-        SubjectList.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.highlight"));
-
-        javax.swing.GroupLayout SubjectListLayout = new javax.swing.GroupLayout(SubjectList);
-        SubjectList.setLayout(SubjectListLayout);
-        SubjectListLayout.setHorizontalGroup(
-            SubjectListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 561, Short.MAX_VALUE)
-        );
-        SubjectListLayout.setVerticalGroup(
-            SubjectListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
-        );
 
         misTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +69,11 @@ public class FillForm extends javax.swing.JFrame {
         jLabel1.setText("Enter MIS No :");
 
         jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         submitButton.setText("SUBMIT");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -83,31 +82,40 @@ public class FillForm extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout subjectListPanelLayout = new javax.swing.GroupLayout(subjectListPanel);
+        subjectListPanel.setLayout(subjectListPanelLayout);
+        subjectListPanelLayout.setHorizontalGroup(
+            subjectListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 408, Short.MAX_VALUE)
+        );
+        subjectListPanelLayout.setVerticalGroup(
+            subjectListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 240, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(subjectListPanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(252, 252, 252)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(SubjectList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(96, 96, 96)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(misTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(246, 246, 246)
-                                .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(misTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(218, 218, 218)
+                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(233, 233, 233)
+                        .addComponent(jButton1)))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,14 +126,14 @@ public class FillForm extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(SubjectList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(submitButton)
                 .addContainerGap())
         );
 
-        setBounds(400, 200, 595, 435);
+        setBounds(400, 200, 544, 435);
     }// </editor-fold>//GEN-END:initComponents
 
     private void misTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_misTextFieldActionPerformed
@@ -133,9 +141,171 @@ public class FillForm extends javax.swing.JFrame {
     }//GEN-LAST:event_misTextFieldActionPerformed
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        // TODO add your handling code here:
+        Global.nextCount = 0;
+        byte[] arr = new byte[Global.jtextfieldArray.size()];
+        int i = 0;
+        for(JTextField tf : Global.jtextfieldArray) {
+            int index = Integer.parseInt(tf.getText());
+            arr[index - 1] = Global.subjectConsidered.get(i).getId();
+            i++;
+        }
+        Global.studentCandidate.setPriorityList(arr);
+        System.out.println("Done with priority list");
+        MainMenuForm.form.dispose();
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String mis = misTextField.getText();
+        if(mis.length() != 9) {
+            JOptionPane.showMessageDialog(this, "Invalid MIS Number 1", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int start = Integer.parseInt(mis.substring(0, 2));
+        if(start != 11 && start != 14) {
+            JOptionPane.showMessageDialog(this, "Invalid MIS Number 2", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int year = Integer.parseInt(mis.substring(2, 4));
+        int deptId = Integer.parseInt(mis.substring(4, 6));
+        int index = 0;
+        if(start == 11) {
+            if(year < 13 || year > 15) {
+              JOptionPane.showMessageDialog(this, "Invalid MIS Number 3", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
+            index = 15 - year;
+        }
+        if(start == 14) {
+            if(year < 14 || year > 16) {
+               JOptionPane.showMessageDialog(this, "Invalid MIS Number 4", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
+            index = 16 - year;
+        }
+        
+        if(!checkEnum(deptId)) {
+            JOptionPane.showMessageDialog(this, "Invalid MIS Number 5", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        /*Valid till here*/
+        int misNo = Integer.parseInt(mis);
+        boolean got = false;
+        System.out.println("Searching at dptId"+deptId+" , year"+ index);
+        LinkedList<Student>[] ll = Global.deptList.get(deptId);
+        for(Student s: ll[index]) {
+            if(s.getMis() == misNo) {
+                got = true;
+                Global.studentCandidate = s;
+                break;
+            }
+        }
+        if(!got) {
+           JOptionPane.showMessageDialog(this, "Your number is not in list 5", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        if(Global.studentCandidate.getPriorityList() != null) {
+            JOptionPane.showMessageDialog(this, "You have Already filled your Form", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        String[] titles = {"Sr. No.","Subject Name"," ", "Priority"};
+        Global.subjectConsidered = new LinkedList<Subject> ();
+        int i = 0;
+        Object rows[][];
+        for(Subject s: Global.subjectArray){
+            if(s.getDept() != deptId && s.getYear() == (index + 2)) {
+                Global.subjectConsidered.add(s);
+               
+                
+            }
+        }
+        /*rows = new Object[Global.subjectConsidered.size()][4];
+        for(Subject s: Global.subjectConsidered) {
+            
+            JCheckBox jcb = new JCheckBox(s.getName());
+            rows[i][0] = i + 1;
+            rows[i][1] = s.getName();
+            rows[i][2] = new Boolean(false);
+            rows[i][3] = " ";
+            i++;
+        }
+        DefaultTableModel dm = new DefaultTableModel();
+        dm.setDataVector(rows, titles);
+        JTable jt =  new JTable(dm);
+       jt.getColumn(" ").setCellRenderer(new MultiRenderer());
+        //jt.getColumn(" ").setCellEditor(new MultiEditor());
+        JScrollPane jsp = new JScrollPane(jt);
+        ;*/
+        subjectListPanel.removeAll();   //added by pankaj
+        //subjectListPanel.setLayout(new GridLayout(Global.subjectConsidered.size(), 4));
+        subjectListPanel.setLayout(new GridLayout(0, 4));
+        subjectListPanel.add(new JLabel("Sr. No."));
+        subjectListPanel.add(new JLabel("Subject Name"));
+        subjectListPanel.add(new JLabel(" "));
+        subjectListPanel.add(new JLabel("Priority"));
+        Global.jtextfieldArray = new LinkedList<JTextField>();
+        for(Subject s: Global.subjectConsidered) {
+            
+            JCheckBox jcb = new JCheckBox(s.getName());
+            JTextField jtf = new JTextField("");
+            jtf.setEditable(false);
+            Global.jtextfieldArray.addLast(jtf);
+            jcb.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    
+                    JCheckBox cb = (JCheckBox)e.getItem();
+                    if(e.getStateChange() == ItemEvent.SELECTED && Global.errorFlag ==  true) {
+                        Global.errorFlag = false;
+                        return;
+                    }
+                    if(e.getStateChange() == ItemEvent.SELECTED){
+                        jtf.setText(""+(Global.nextCount + 1));
+                        Global.nextCount++;
+                        System.out.println("checked"+Global.nextCount);
+                    }
+                    else{
+                        if(Integer.parseInt(jtf.getText()) == Global.nextCount) {
+                            jtf.setText("");
+                            Global.nextCount--;
+                            System.out.println("cancelled"+Global.nextCount);
+                        }
+                        else {
+                           Global.errorFlag = true;
+                           // JOptionPane.showMessageDialog(null, "Please unselect all elements in \nreverse order", "ERROR", JOptionPane.ERROR_MESSAGE);
+                           cb.setSelected(true);
+                           System.out.println("Over here");
+                        }
+                    }
+                    if(Global.nextCount == Global.subjectConsidered.size()) {
+                        submitButton.setEnabled(true);
+                    }
+                    else {
+                        submitButton.setEnabled(false);
+                    }
+                }
+            });
+            subjectListPanel.add(new JLabel(""+(i + 1)));
+            subjectListPanel.add(new JLabel(s.getName()));
+            subjectListPanel.add(jcb);
+            subjectListPanel.add(jtf);
+            i++;
+        }
+        
+        subjectListPanel.revalidate();
+        subjectListPanel.repaint();
+        MainMenuForm.loadform.getContentPane().revalidate();
+        MainMenuForm.loadform.getContentPane().repaint();
+        //MainMenuForm.loadform.pack();
+        System.out.println("DONE\n");
+    }//GEN-LAST:event_jButton1ActionPerformed
+    boolean checkEnum(int i) {
+        for(deptEnum d: deptEnum.values()) {
+            if(d.ordinal() == i) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * @param args the command line arguments
      */
@@ -172,12 +342,11 @@ public class FillForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel SubjectList;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField misTextField;
-    private javax.swing.JButton submitButton;
+    public static javax.swing.JPanel subjectListPanel;
+    public static javax.swing.JButton submitButton;
     // End of variables declaration//GEN-END:variables
 }

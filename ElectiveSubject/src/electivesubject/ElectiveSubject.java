@@ -15,6 +15,7 @@ public class ElectiveSubject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Global g = new Global();
         form = new MainMenuForm();
         form.setVisible(true);
     }

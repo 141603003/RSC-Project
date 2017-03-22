@@ -7,6 +7,7 @@ package electivesubject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,8 @@ import javax.swing.JOptionPane;
  *
  * @author vinay
  */
+enum deptEnum{PROD, CIVIL, MECH, COMP, IT};
+
 public class LoadFileForm extends javax.swing.JFrame {
 
     /**
@@ -50,6 +53,7 @@ public class LoadFileForm extends javax.swing.JFrame {
         loadFileButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load Input Files");
@@ -145,8 +149,9 @@ public class LoadFileForm extends javax.swing.JFrame {
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(173, 173, 173)
-                                .addComponent(loadFileButton)))
-                        .addGap(0, 65, Short.MAX_VALUE)))
+                                .addComponent(loadFileButton))
+                            .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 11, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(218, 218, 218)
@@ -182,7 +187,9 @@ public class LoadFileForm extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addGap(36, 36, 36)
                 .addComponent(loadFileButton)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         setBounds(400, 200, 578, 449);
@@ -266,44 +273,142 @@ public class LoadFileForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        File file = new File(fileNames[0]);
-        try {
-            Scanner scan = new Scanner(file);
-            int line = 0;
-            while(scan.hasNext()) {
-                line++;
-                prob = false; 
-                if(scan.hasNextInt()) {
-                    scan.nextInt();
+        
+        /*Reading Student info*/
+        for(int i = 0; i <=2; i++) {
+            File file = new File(fileNames[i]);
+            boolean read = false;
+            try {
+                try (Scanner scan = new Scanner(file)) {
+                    int line = 0;
+                    
+                    while(scan.hasNext()) {
+                        line++;
+                        prob = false;
+                        int mis = 0;
+                        float cgpa = 0;
+                        /*MIS ID*/
+                        if(scan.hasNextInt()) {
+                            mis = scan.nextInt();
+                            if(mis < 100000000) {
+                                prob = true;
+                            }
+                        }
+                        else {
+                            prob = true;
+                        }
+                        /*CGPA*/
+                        if(scan.hasNextFloat()) {
+                            cgpa = scan.nextFloat();
+                            System.out.println("CGPA got: "+cgpa);
+                            if(cgpa > 10) {
+                                prob = true;
+                            }
+                        }
+                        else {
+                            prob = true;
+                        }
+                        if(!prob) {
+                            Student s = new Student(mis, cgpa);
+                            Global.addIntoCGPAList(i, s, cgpa);
+                            Global.addIntoDeptList(i, s, mis);
+                            read = true;
+                        }
+                        else {
+                            scan.nextLine();
+                            System.out.println("Problem in Reading Line: "+line);
+                        }
+                    }
                 }
-                else {
-                    prob = true;
-                }
-                if(scan.hasNextFloat()) {
-                    scan.nextFloat();
-                }
-                else {
-                    prob = true;
-                }
-                if(!prob) {
-                    //create Student object
-                    //add to cgpa list
-                    // add to class list
-                }
-                else {
-                    scan.nextLine();
-                    System.out.println("Problem in Reading Line: "+line);
-                }
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "File not Found in system:" + fileNames[i]+"\n Load another file", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            scan.close();
+            if(!read) {
+                JOptionPane.showMessageDialog(this, "Problem in reading file (Empty or IImproper format):" + fileNames[i]+"\n Load another file", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            System.out.println("Read file");
+            
+        }
+        /*Reading Elective subject file*/
+        File file = new File(fileNames[3]);
+        
+            FileReader inp = null;
+        try {
+            inp = new FileReader(file);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(LoadFileForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Read file");
         
-        
+            boolean read = false;
+            try (Scanner scan = new Scanner(inp)) {
+                int line = 0;
+                byte subjId = 0;
+                System.out.println(scan.hasNext());
+                while(scan.hasNext()) {
+                    line++;
+                    prob = false;
+                    String name = null, dept = null;
+                    Short maxCap = 0;
+                    Byte year = 0;
+                    if(scan.hasNext()) {
+                        name = scan.next();
+                    }
+                    else {
+                        prob = true;
+                        System.out.println("Prob 1\n");
+                    }
+                    if(scan.hasNext()) {
+                        dept = scan.next();
+                    }
+                    else {
+                        prob = true;
+                        System.out.println("Prob 2\n");
+                    }
+                    if(scan.hasNextShort()) {
+                        maxCap = scan.nextShort();
+                    }
+                    else {
+                        prob = true;
+                        System.out.println("Prob 3\n");
+                    }
+                    if(scan.hasNextByte()) {
+                        year = scan.nextByte();
+                        if(year > 4 || year < 2) {
+                            prob = true;
+                        }
+                    }
+                    else {
+                        prob = true;
+                        System.out.println("Prob 4\n");
+                    }
+                    if(!prob) {
+                        deptEnum t = deptEnum.valueOf(dept);
+                        Subject s;
+                        s = new Subject(name, t.ordinal(), (byte) ((byte)subjId + 1), maxCap, year);
+                        Global.subjectArray.addLast(s);
+                        subjId++;
+                        //add to cgpa list
+                        // add to class list
+                        read = true;
+                    }
+                    else {
+                        scan.nextLine();
+                        System.out.println("Problem in Reading Line (Elective subject line): "+line);
+                    }
+                }
+            }
+            if(!read) {
+                JOptionPane.showMessageDialog(this, "Problem in reading file (Empty or IImproper format):" + fileNames[3]+"\n Load another file", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            System.out.println("Read file");
+        Global.printList();
         MainMenuForm.allocateButton.setEnabled(true);
-        MainMenuForm.fillFormButton.setEnabled(true);
+       MainMenuForm.fillFormButton.setEnabled(true);
+        progressBar.setIndeterminate(true);
+        progressBar.setValue(100);
     }//GEN-LAST:event_loadFileButtonActionPerformed
 
     /**
@@ -335,6 +440,7 @@ public class LoadFileForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new LoadFileForm().setVisible(true);
             }
@@ -354,6 +460,7 @@ public class LoadFileForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton loadFileButton;
+    public static javax.swing.JProgressBar progressBar;
     private javax.swing.JTextField subjectTextField;
     private javax.swing.JTextField syTextField;
     private javax.swing.JTextField tyTextField;

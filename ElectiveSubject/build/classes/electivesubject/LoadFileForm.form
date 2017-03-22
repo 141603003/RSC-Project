@@ -60,8 +60,9 @@
                               <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
                               <Component id="loadFileButton" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="progressBar" alignment="0" min="-2" pref="514" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="65" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -106,7 +107,9 @@
               </Group>
               <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Component id="loadFileButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="60" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="progressBar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -214,6 +217,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Select Input Files"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JProgressBar" name="progressBar">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
