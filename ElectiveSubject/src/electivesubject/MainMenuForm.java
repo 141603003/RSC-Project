@@ -57,7 +57,7 @@ public class MainMenuForm extends javax.swing.JFrame {
         setTitle("Elective subject allocation Software");
 
         jLabel1.setFont(new java.awt.Font("NanumMyeongjo", 1, 24)); // NOI18N
-        jLabel1.setText("Elective Subject Allocation");
+        jLabel1.setText("Elective Subject Registration");
 
         loadButton.setText("Load Input Files");
         loadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -182,9 +182,10 @@ public class MainMenuForm extends javax.swing.JFrame {
                 studRow[1] = Float.toString(stud.getCGPA());
                 list.add(studRow);
             }
-            subjTitle[0] = "";
-            subjTitle[1] = "";
-            list.add(subjTitle);
+            String[] blank = new String[2];
+            blank[0] = "";
+            blank[1] = "";
+            list.add(blank);
         }
         String[][] str = new String[list.size()][2];
         int i = 0;
@@ -226,11 +227,12 @@ public class MainMenuForm extends javax.swing.JFrame {
                     if(subj.getMaxCap() - subj.getCurrCap() != 0) {
                         //add this student to subj list
                         subj.allocatedStudent.add(s);
+                         Global.priority[counter] += 1;
                         System.out.println("Allocated "+subj.getName()+" to "+s.getMis());
                         break;
                     }
                     else {
-                        Global.priority[counter] += 1;
+                       
                     }
                     counter++;
                 }

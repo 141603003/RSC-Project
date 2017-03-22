@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author vinay
  */
-enum deptEnum{PROD, CIVIL, MECH, COMP, IT};
+enum deptEnum{MECH, PROD, CIVIL, COMP, IT, ELEC, PLANNING, ENTC, INSTRU, META};
 
 public class LoadFileForm extends javax.swing.JFrame {
 
@@ -407,8 +407,7 @@ public class LoadFileForm extends javax.swing.JFrame {
         Global.printList();
         MainMenuForm.allocateButton.setEnabled(true);
        MainMenuForm.fillFormButton.setEnabled(true);
-        progressBar.setIndeterminate(true);
-        progressBar.setValue(100);
+        MainMenuForm.loadform.dispose();
     }//GEN-LAST:event_loadFileButtonActionPerformed
 
     /**

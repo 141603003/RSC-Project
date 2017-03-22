@@ -5,6 +5,8 @@
  */
 package electivesubject;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 /**
@@ -22,7 +24,24 @@ public class Graph2 extends javax.swing.JFrame {
     
     @Override
     public void paint(Graphics g) {
-        
+        Subject s;
+	Font font = new Font("Arial",Font.BOLD,15);
+	g.setFont(font);
+	for(int i  = 0; i < Global.priority.length; i++){ //instead use list jiska chahie
+            //s = Global.subjectArray.get(i);
+            g.setColor(Color.BLUE);
+            g.drawString(""+(i + 1), 20, i * 50 + 30);
+            g.setColor(Color.RED);
+            g.fillRect(70, i * 50 + 10,Global.priority[i] , 40); //list name
+            g.drawString(String.valueOf(Global.priority[i]), 70+Global.priority[i]+10, i * 50 + 35); //list name
+	}
+
+	String msg = "Bar Chart for prioritiy alloted to Students";
+	g.setColor(Color.darkGray);
+
+	font = new Font("Arial",Font.BOLD,20);
+	g.setFont(font);
+        g.drawString(msg, 50, 300);
     }
     /**
      * This method is called from within the constructor to initialize the form.

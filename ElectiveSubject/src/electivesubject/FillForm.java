@@ -5,25 +5,15 @@
  */
 package electivesubject;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.EventObject;
 import java.util.LinkedList;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+
 import javax.swing.JTextField;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -147,6 +137,7 @@ public class FillForm extends javax.swing.JFrame {
         for(JTextField tf : Global.jtextfieldArray) {
             int index = Integer.parseInt(tf.getText());
             arr[index - 1] = Global.subjectConsidered.get(i).getId();
+            Global.subjectConsidered.get(i).setCurrPrior(Global.subjectConsidered.get(i).getCurrPrior()+ 5*(11 - index));
             i++;
         }
         Global.studentCandidate.setPriorityList(arr);

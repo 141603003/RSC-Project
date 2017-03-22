@@ -29,8 +29,8 @@ public class Subject {
         this.maxCap = maxCap;
         allocatedStudent = new LinkedList<Student>();
     }
-    public void incCurrPrior() {
-        currPrior++;
+    public void setCurrPrior(int t) {
+        currPrior = t;
     }
     public byte getId () {
         return id;
